@@ -92,6 +92,7 @@ mod tests {
             (vec!["zh-Hans-CN", "zh-TW"], "zh-hans"),
             (vec!["en-US", "ru-RU"], "en"),
             (vec!["sv-SE", "ar-SA"], "ar"),
+            (vec!["sv-SE", "he-IL"], "he"),
             (vec!["sv-SE", "sw-KE"], "en"),
             (vec!["de-AT", "en-US"], "de"),
             (vec!["pt-PT"], "pt-br"),
