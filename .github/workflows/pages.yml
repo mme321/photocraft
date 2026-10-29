@@ -1,0 +1,78 @@
+name: Pages
+
+# Publishes the browser build to GitHub Pages: the site packaging/web/package.sh zips, with the
+# craft-fonts faces served next to it so non-Latin interface languages (Hebrew, Arabic, CJK) draw
+# with real glyphs. Hosting notes: packaging/web/README.md.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  # Match ci.yml and release.yml.
+  TRUNK_VERSION: 0.21.14
+  # The craft-fonts commit release.yml pins.
+  CRAFT_FONTS_REF: b076417b5880bd4154bd22f00695b1d28c6bea83
+
+jobs:
+  build:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: storytold/craft-fonts
+          ref: ${{ env.CRAFT_FONTS_REF }}
+          path: craft-fonts
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: pages
+      - name: Install trunk
+        run: |
+          curl --proto '=https' -fsSL "https://github.com/trunk-rs/trunk/releases/download/v${TRUNK_VERSION}/trunk-x86_64-unknown-linux-gnu.tar.gz" \
+            | tar -xz -C "$HOME/.cargo/bin" trunk
+          trunk --version
+      - name: Build the site
+        env:
+          PHOTOCRAFT_WEB_FONTS_DIR: ${{ github.workspace }}/craft-fonts
+        run: packaging/web/package.sh
+      - name: Unpack the site
+        run: |
+          mkdir -p _site
+          unzip -q dist/release/photocraft-web-*.zip -d _unzipped
+          mv _unzipped/photocraft-web-*/* _site/
+          # Pages runs Jekyll on a branch site only; an artifact deploy serves files as they are,
+          # and this keeps it that way should the source ever change.
+          touch _site/.nojekyll
+          ls -la _site
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
