@@ -111,7 +111,9 @@ the right of a right-to-left document name, and `bidi_text::elide` cuts a right-
 its logical end. Document text is laid out by the text engine.
 
 Arabic (`ar`) is the first right-to-left catalog: Modern Standard Arabic, Western digits, the six
-CLDR plural forms (zero|one|two|few|many|other). To check the mirrored layout with any language, launch with
+CLDR plural forms (zero|one|two|few|many|other). Hebrew (`he`) is the second: Modern Hebrew,
+Western digits, one|other plurals (a count from 2 up takes the plural noun); the legacy `iw`
+code resolves to it. To check the mirrored layout with any language, launch with
 `PHOTOCRAFT_UI_DIRECTION=rtl` (or `ltr` to force left-to-right); it is read once per process
 and has no effect on the web build:
 
