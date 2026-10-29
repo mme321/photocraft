@@ -3536,3 +3536,22 @@ curves	Smooth	החלקה
 	Update and Restart	עדכון והפעלה מחדש
 	X	X
 	Y	Y
+
+
+# Select and Mask workspace (#8896)
+	Clear Selection	ניקוי הבחירה
+	Color Aware	מודע צבע
+	Decontaminate Colors	ניקוי זיהום צבע
+	Edge Detection	זיהוי קצוות
+	Global Refinements	עידונים גלובליים
+	High Quality Preview	תצוגה מקדימה באיכות גבוהה
+	Object Aware	מודע אובייקטים
+	Object Aware needs a segmentation model, which isn't available yet	'מודע אובייקטים' דורש מודל פילוח, שעדיין אינו זמין
+	Real-Time Refinement	עידון בזמן אמת
+	Refine Edge Brush Tool	כלי מברשת עידון קצה
+	Refine Hair	עידון שיער
+	Refine Hair needs hair detection, which isn't available yet	'עידון שיער' דורש זיהוי שיער, שעדיין אינו זמין
+	Refine Mode	מצב עידון
+	Select and Mask was closed: another layer was selected	'בחירה ומיסוך' נסגר: נבחרה שכבה אחרת
+	Select and Mask was closed: its document is no longer the active one	'בחירה ומיסוך' נסגר: המסמך שלו כבר אינו המסמך הפעיל
+	View Mode	מצב תצוגה
